@@ -1,9 +1,5 @@
 ORG 0x7C00 ; Set origin to 7C00H, where BIOS loads the boot sector
 
-; Set ES to point to the data segment so we can access the strings
-mov AX, DS
-mov ES, AX
-
 ; Method 1: Write character as TTY (0EH)
 mov AH, 0Eh ; Write character to TTY
 mov AL, 'A' ; Character to write
