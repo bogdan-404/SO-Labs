@@ -5,44 +5,55 @@ mov ds, ax
 mov es, ax  
 mov ss, ax  
 mov sp, 0x7C00  
+mov cx, 0
 
 MainLoop:
     xor ah, ah   
-    int 0x16   
-
-    cmp al, 0x0D
+    int 16h  
+    
+    cmp al, 0Dh
     je  HandleEnter
-    cmp al, 0x08 
+    cmp al, 08h 
     je  HandleBackspace
 
-    mov ah, 0x0E 
-    int 0x10     
+    cmp cx, 256
+    je OnlyBackspaceEnter
 
+    mov ah, 0Eh 
+    int 10h     
+    inc cx
     jmp MainLoop 
 
+OnlyBackspaceEnter:
+    cmp al, 08h
+    je HandleBackspace
+    cmp al, 0Dh
+    je HandleEnter
+    jmp MainLoop
+
 HandleEnter:
-    mov ax, 0x0E0D 
-    int 0x10    
-    mov ax, 0x0E0A 
-    int 0x10     
+    mov ax, 0E0Dh 
+    int 10h      
+    mov ax, 0E0Ah 
+    int 10h      
+    mov cx, 0 
     jmp MainLoop
 
 HandleBackspace:
-    mov ah, 0x03 
-    int 0x10   
-    or dx, dx 
-    je  MainLoop 
+    test cx, cx 
+    jz MainLoop 
 
-    dec dl      
-    mov ah, 0x02 
-    int 0x10    
+    dec cx 
+    mov ah, 03h 
+    int 10h     
 
-    mov ah, 0x0E 
-    mov al, ' ' 
-    int 0x10     
-
-    mov ah, 0x02 
-    int 0x10     
+    dec dl       
+    mov ah, 02h 
+    int 10h     
+    mov ah, 0Eh 
+    mov al, ' '  
+    int 10h     
+    mov ah, 02h 
+    int 10h     
 
     jmp MainLoop 
-
