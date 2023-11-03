@@ -1,10 +1,5 @@
 ORG 0x7C00  
 
-xor ax, ax  
-mov ds, ax  
-mov es, ax  
-mov ss, ax  
-mov sp, 0x7C00  
 mov cx, 0
 
 MainLoop:
